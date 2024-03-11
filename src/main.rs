@@ -15,7 +15,7 @@ async fn index() -> impl Responder {
     HttpResponse::Ok().body("Hello World!")
 }
 
-#[get("/user/register")]
+#[post("/user/register")]
 async fn register_user(body: Json<UserCreds>) -> impl Responder {
     let is_valid = body.validate();
     match is_valid {
@@ -50,6 +50,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .service(index)
+            .service(register_user)
     })
     .bind(("127.0.0.1", 8080))?
     .run()
