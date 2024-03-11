@@ -2,6 +2,7 @@ use actix_web::{ get, post, patch, App, HttpResponse, HttpServer, Responder, web
 
 // local crate imports
 mod controllers;
+mod models;
 
 // imported controllers
 use controllers::{ test_api, register_user };
