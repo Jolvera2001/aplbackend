@@ -1,5 +1,12 @@
 use actix_web::{ get, post, patch, App, HttpResponse, HttpServer, Responder, web::Json, web::Path, web::Data };
 
+// local crate imports
+mod models;
+
+// local structs
+use crate::models::user::User;
+use crate::models::application::Application;
+
 #[get("/")]
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("Hello World!")
