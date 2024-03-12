@@ -16,8 +16,14 @@ async fn index() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let db = Database::init()
+        .await
+        .expect("Failed to connect to database");
+    let db_data = Data::new(db);
+
     HttpServer::new(|| {
         App::new()
+            .app_data(db_data.clone())
             .service(index)
             .service(register_user)
     })
