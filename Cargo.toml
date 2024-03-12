@@ -13,4 +13,4 @@ json = "0.12.4"
 serde = { version = "1.0.197", features = ["derive"] }
 uuid = "1.7.0"
 validator = { version = "0.17.0", features = ["derive"] }
-surrealdb = "1.2.2"
+mongodb = "2.8.1"
