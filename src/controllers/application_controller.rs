@@ -2,25 +2,25 @@ use actix_web::{ get, post, patch, delete, App, HttpResponse, HttpServer, Respon
 use validator::Validate;
 use uuid;
 
-// importing models
-use crate::models::Application;
+use crate::models::{ Application, UpdateApplicationURL };
 
 #[get("/application")]
 pub async fn get_applications() -> impl Responder {
-    Todo!("Implement to retrieve ALL applications of a user")
+    todo!("Implement to retrieve ALL applications of a user")
 }
 
 #[post("/application/add")]
 pub async fn add_application() -> impl Responder {
-    Todo!("Needs application model")
+    todo!("Needs application model")
 }
 
-#[patch("/application/edit")]
-pub async fn edit_application() -> Responder {
-    Todo!("Needs application model; needs to be able to edit application")
+#[patch("/application/edit/{uuid}")]
+pub async fn edit_application(application_url: Path<UpdateApplicationURL>) -> Responder {
+    let uuid = application_url.into_inner().uuid;
+    HttpResponse::Ok().body(format!("Updating application with uuid: {}", uuid))
 }
 
 #[delete("/application/delete")]
-pub async fn delete_application() -> Responder {
-    Todo!("Delete application using application id")
+pub async fn delete_application(body: Json<Application>) -> Responder {
+    todo!("Delete application using application id")
 }

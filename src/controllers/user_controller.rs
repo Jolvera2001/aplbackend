@@ -4,8 +4,6 @@ use uuid;
 
 use crate::models::{User, UserCreds};
 
-
-// main code
 #[post("/user/register")]
 pub async fn register_user(body: Json<UserCreds>) -> impl Responder {
     let is_valid = body.validate();

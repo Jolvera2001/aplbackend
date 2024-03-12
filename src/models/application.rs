@@ -1,7 +1,6 @@
 use serde::{ Serialize, Deserialize };
 use validator::Validate;
 
-// main User model
 #[derive(Serialize, Deserialize, Validate)]
 pub struct Application {
     pub uuid: String,
@@ -21,3 +20,8 @@ impl Application {
 
 // models for validation
 // may not be needed yet
+
+#[derive(Serialize, Deserialize, Validate)]
+pub struct UpdateApplicationURL {
+    pub uuid: String
+}
