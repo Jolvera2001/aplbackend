@@ -24,4 +24,33 @@ impl Database {
             db_name: String::from("aplcore")
         })
     }
+
+    pub async fn add_user(&self, new_user: User) -> Option<User> {
+        let created_user = self.client
+            .create(("users", new_user.username.clone()))
+            .content(new_user)
+            .await;
+
+        match created_user {
+            Ok(user) => user,
+            Err(_) => None,
+        }
+    }
+
+    pub async fn check_user(&self, username: String, password: String) -> Option<User> {
+        let user_result: Result<Option<User>, Error> = self.client
+            .select(("users", username))
+            .await;
+
+        match user_result {
+            Ok(Some(user)) => {
+                if user.password == password {
+                    Some(user)
+                } else {
+                    None
+                }
+            },
+            _ => None
+        }
+    }
 }

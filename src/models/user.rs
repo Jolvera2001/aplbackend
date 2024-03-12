@@ -3,7 +3,6 @@ use validator::Validate;
 use surrealdb::Error;
 
 use crate::db::Database;
-use crate::models::traits::CrudOperations;
 
 // main User model
 #[derive(Serialize, Deserialize, Validate, Debug)]
@@ -33,30 +32,10 @@ pub struct UserCreds {
     pub age: i32
 }
 
-// CRUD
-
-impl CrudOperations<User> for Database {
-    async fn create(&self, new_item: User) -> Result<(), Error> {
-        let created_user = self.client
-            .create(("users", new_item.uuid.clone()))
-            .content(new_item)
-            .await;
-
-        match created_user {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
-    }
-
-    async fn read(&self, id: String) -> Result<Option<User>, Error> {
-        
-    }
-
-    async fn update(&self, id: String, item: User) -> Result<(), Error> {
-        
-    }
-
-    async fn delete(&self, id: String) -> Result<(), Error> {
-        
-    }
+#[derive(Serialize, Deserialize, Validate)]
+pub struct UserLogin {
+    #[validate(length(min = 3, max = 50))]
+    pub username: String,
+    #[validate(length(min = 10, max = 50))]
+    pub password: String
 }
