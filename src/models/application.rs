@@ -14,7 +14,7 @@ pub struct Application {
 }
 
 impl Application {
-    pub fn new (uuid: String, job_title: String, job_description: String, job_status: String, date_created: String, job_closed: bool, job_source: String) -> Application {
+    pub fn new(uuid: String, job_title: String, job_description: String, job_status: String, date_created: String, job_closed: bool, job_source: String) -> Application {
         Application {uuid, job_title, job_description, job_status, date_created, job_closed, job_source}
     }
 }

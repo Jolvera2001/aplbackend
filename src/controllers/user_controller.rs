@@ -1,4 +1,4 @@
-use actix_web::{ get, post, patch, App, HttpResponse, HttpServer, Responder, web::Json, web::Path, web::Data };
+use actix_web::{ get, post, patch, HttpResponse, Responder, web::Json, web::Path, web::Data };
 use validator::Validate;
 use uuid;
 

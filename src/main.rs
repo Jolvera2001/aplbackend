@@ -1,4 +1,4 @@
-use actix_web::{ get, post, patch, App, HttpResponse, HttpServer, Responder, web::Json, web::Path, web::Data };
+use actix_web::{ get, App, HttpResponse, HttpServer, Responder, web::Data };
 
 // local crate imports
 mod controllers;
