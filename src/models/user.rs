@@ -6,7 +6,7 @@ use crate::db::Database;
 use crate::models::application::Application;
 
 // main User model
-#[derive(Serialize, Deserialize, Validate, Debug, Clone)]
+#[derive(Serialize, Deserialize, Validate, Debug)]
 pub struct User {
     pub uuid: String,
     pub username: String,

@@ -7,12 +7,12 @@ use crate::db::Database;
 
 #[get("/application/{user}")]
 pub async fn get_applications(user_record: Path<String>, db: Data<Database>) -> impl Responder {
-     let applications = db.get_user_applications(user_record.into_inner()).await;
-     match applications {
-        Ok(Some(apps)) => HttpResponse::Ok().body(format!("Applications: {:?}", apps)),
-        Ok(None) => HttpResponse::Ok().body("No applications found"),
-        Err(_) => HttpResponse::InternalServerError().body("Failed to retrieve applications"),
-     }
+      let applications = db.get_user_applications(user_record.into_inner()).await;
+      match applications {
+          Ok(Some(apps)) => HttpResponse::Ok().json(apps),
+          Ok(None) => HttpResponse::Ok().body("No applications found"),
+          Err(_) => HttpResponse::InternalServerError().body("Failed to retrieve applications"),
+      }
 }
 
 #[post("/application/add/{user}")]

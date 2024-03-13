@@ -8,6 +8,7 @@ mod db;
 
 // imported structs
 use controllers::{ register_user, login_user };
+use controllers::{ get_applications, add_application };
 use db::Database;
 
 #[get("/")]
@@ -29,6 +30,8 @@ async fn main() -> std::io::Result<()> {
             .service(index)
             .service(register_user)
             .service(login_user)
+            .service(get_applications)
+            .service(add_application)
     })
     .bind(("127.0.0.1", 8080))?
     .run()
