@@ -102,11 +102,10 @@ impl Database {
                         .content(user)
                         .await;
                     match updated_user {
-                        Ok(user) => Ok(user.unwrap()), // Unwrap the Option<User> to return the inner User struct
+                        Ok(user) => Ok(user.unwrap()),
                         Err(e) => Err(e),
                     }
                 }
-                // You need to return something here
             }
             Ok(None) => Ok(None),
             Err(e) => Err(e),
