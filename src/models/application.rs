@@ -1,7 +1,7 @@
 use serde::{ Serialize, Deserialize };
 use validator::Validate;
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Serialize, Deserialize, Validate, Debug)]
 pub struct Application {
     pub uuid: String,
     pub job_title: String,
@@ -24,4 +24,14 @@ impl Application {
 #[derive(Serialize, Deserialize, Validate)]
 pub struct UpdateApplicationURL {
     pub uuid: String
+}
+
+#[derive(Serialize, Deserialize, Validate)]
+pub struct ApplicationCreds {
+    pub job_title: String,
+    pub job_description: String,
+    pub job_status: String,
+    pub date_created: String,
+    pub job_closed: bool,
+    pub job_source: String
 }

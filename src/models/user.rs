@@ -3,19 +3,21 @@ use validator::Validate;
 use surrealdb::Error;
 
 use crate::db::Database;
+use crate::models::application::Application;
 
 // main User model
-#[derive(Serialize, Deserialize, Validate, Debug)]
+#[derive(Serialize, Deserialize, Validate, Debug, Clone)]
 pub struct User {
     pub uuid: String,
     pub username: String,
     pub password: String,
-    pub age: i32
+    pub age: i32,
+    pub applications: Option<Vec<Application>> 
 }
 
 impl User {
     pub fn new(uuid: String, username: String, password: String, age: i32) -> User {
-        User {uuid, username, password, age}
+        User {uuid, username, password, age, applications: Some(Vec::new())}
     }
 }
 

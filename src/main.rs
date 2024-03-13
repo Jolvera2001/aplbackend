@@ -7,7 +7,7 @@ mod models;
 mod db;
 
 // imported structs
-use controllers::{ register_user };
+use controllers::{ register_user, login_user };
 use db::Database;
 
 #[get("/")]
@@ -28,6 +28,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(db_data.clone())
             .service(index)
             .service(register_user)
+            .service(login_user)
     })
     .bind(("127.0.0.1", 8080))?
     .run()
