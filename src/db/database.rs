@@ -67,48 +67,45 @@ impl Database {
     }
 
     pub async fn get_user_applications(&self, username: String) -> Result<Option<Vec<Application>>, Error> {
-        let user_applications: Result<Option<User>, Error> = self.client
-            .select(("users", username))
-            .await;
-
-        match user_applications {
-            Ok(Some(user)) => Ok(user.applications),
-            Ok(None) => Ok(None),
-            Err(e) => Err(e),
-        }
+        todo!("Get application records using IDs within application_ids")
     }
 
     pub async fn add_user_applications(&self, username: String, application_add: Application) -> Result<Option<User>, Error> {
-        let user_record: Result<Option<User>, Error> = self.client
+        // todo!("Add application record and update user application_ids field with new application ID")
+        let check_user: Result<Option<User>, Error> = self.client
             .select(("users", username.clone()))
             .await;
 
-        match user_record {
+        match check_user {
             Ok(Some(mut user)) => {
-                if let Some(applications) = &mut user.applications {
-                    applications.push(application_add);
-                    let updated_user = self.client
-                        .update(("users", username.clone()))
-                        .content(user)
-                        .await;
-                    match updated_user {
-                        Ok(user) => Ok(Some(user.unwrap())),
-                        Err(e) => Err(e),
-                    }
-                } else {
-                    user.applications = Some(vec![application_add]);
-                    let updated_user = self.client
-                        .update(("users", username))
-                        .content(user)
-                        .await;
-                    match updated_user {
-                        Ok(user) => Ok(user.unwrap()),
-                        Err(e) => Err(e),
-                    }
+                let created_application: Result<Option<Application>, Error> = self.client
+                    .create(("applications", application_add.uuid.clone()))
+                    .content(application_add)
+                    .await;
+
+                match created_application {
+                    Ok(application) => {
+                        if let Some(application_ids) = &mut user.application_ids {
+                            application_ids.push(application.unwrap().uuid.clone());
+                        } else {
+                            user.application_ids = Some(vec![application.unwrap().uuid.clone()]);
+                        }
+                        let updated_user = self.client
+                            .update(("users", username.clone()))
+                            .content(user)
+                            .await;
+
+                        match updated_user {
+                            Ok(Some(user)) => Ok(Some(user)),
+                            Ok(None) => Ok(None),
+                            Err(e) => Err(e),
+                        }
+                    },
+                    Err(e) => Err(e),
                 }
-            }
+            },
             Ok(None) => Ok(None),
-            Err(e) => Err(e),
+            Err(e) => Err(e)
         }
     }
 }
