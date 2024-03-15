@@ -66,7 +66,7 @@ impl Database {
         }
     }
 
-    pub async fn get_user_applications(&self, username: String) -> Result<Option<surrealdb::Response>, Error> {
+    pub async fn get_user_applications(&self, username: String) -> Result<Option<Vec<Application>>, Error> {
         let check_user: Result<Option<User>, Error> = self.client
             .select(("users", username.clone()))
             .await;
@@ -79,7 +79,10 @@ impl Database {
                     .await;
 
                 match user_applications {
-                    Ok(applications) => Ok(Some(applications)),
+                    Ok(mut response) => {
+                        let application_vector: Option<Vec<Application>> = response.take(0)?;
+                        Ok(application_vector) 
+                    }
                     Err(e) => Err(e)
                 }
             }
