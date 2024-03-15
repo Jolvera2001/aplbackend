@@ -58,3 +58,15 @@ pub async fn login_user(body: Json<UserLogin>, db: Data<Database>) -> impl Respo
         }
     }
 }
+
+#[get("/user/all")]
+pub async fn get_users(db: Data<Database>) -> impl Responder {
+    let users = db.client
+        .query("SELECT * FROM users")
+        .await;
+
+    match users {
+        Ok(users) => HttpResponse::Ok().body(format!("Users: {:?}", users)),
+        Err(_) => HttpResponse::InternalServerError().body("Failed to retrieve users")
+    }
+}

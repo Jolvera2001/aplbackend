@@ -7,7 +7,7 @@ mod models;
 mod db;
 
 // imported structs
-use controllers::{ register_user, login_user };
+use controllers::{ register_user, login_user, get_users };
 use controllers::{ get_applications, add_application };
 use db::Database;
 
@@ -30,6 +30,7 @@ async fn main() -> std::io::Result<()> {
             .service(index)
             .service(register_user)
             .service(login_user)
+            .service(get_users)
             .service(get_applications)
             .service(add_application)
     })

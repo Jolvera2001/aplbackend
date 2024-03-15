@@ -73,7 +73,7 @@ impl Database {
 
         match check_user {
             Ok(_) => {
-                let sql = format!("SELECT * FROM applications WHERE user = {}", username);
+                let sql = format!("Select * from applications where user is {}", username);
                 let user_applications = self.client
                     .query(sql)
                     .await;
