@@ -20,6 +20,7 @@ pub async fn add_application(user_record: Path<String>, body: Json<ApplicationCr
     let is_valid = body.validate();
     match is_valid {
         Ok(_) => {
+            let user = user_record.clone();
             let job_title = body.job_title.clone();
             let job_description = body.job_description.clone();
             let job_status = body.job_status.clone();
@@ -30,14 +31,15 @@ pub async fn add_application(user_record: Path<String>, body: Json<ApplicationCr
             let mut buffer = uuid::Uuid::encode_buffer();
             let new_uuid = uuid::Uuid::new_v4().simple().encode_lower(&mut buffer);
 
-            let new_application = db.add_user_applications(user_record.into_inner(), Application::new(
+            let new_application = db.add_user_applications(user.clone(), Application::new(
                 String::from(new_uuid),
                 job_title,
                 job_description,
                 job_status,
                 date_created,
                 job_closed,
-                job_source
+                job_source,
+                user
             )).await;
 
             match new_application {
