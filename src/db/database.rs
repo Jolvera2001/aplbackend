@@ -66,46 +66,48 @@ impl Database {
         }
     }
 
-    pub async fn get_user_applications(&self, username: String) -> Result<Option<Vec<Application>>, Error> {
-        todo!("Get application records using IDs within application_ids")
-    }
-
-    pub async fn add_user_applications(&self, username: String, application_add: Application) -> Result<Option<User>, Error> {
-        // todo!("Add application record and update user application_ids field with new application ID")
+    pub async fn get_user_applications(&self, username: String) -> Result<Option<surrealdb::Response>, Error> {
         let check_user: Result<Option<User>, Error> = self.client
             .select(("users", username.clone()))
             .await;
 
         match check_user {
-            Ok(Some(mut user)) => {
-                let created_application: Result<Option<Application>, Error> = self.client
-                    .create(("applications", application_add.uuid.clone()))
-                    .content(application_add)
+            Ok(_) => {
+                let sql = format!("SELECT * FROM applications WHERE user = {}", username);
+                let user_applications = self.client
+                    .query(sql)
                     .await;
 
-                match created_application {
-                    Ok(application) => {
-                        if let Some(application_ids) = &mut user.application_ids {
-                            application_ids.push(application.unwrap().uuid.clone());
-                        } else {
-                            user.application_ids = Some(vec![application.unwrap().uuid.clone()]);
-                        }
-                        let updated_user = self.client
-                            .update(("users", username.clone()))
-                            .content(user)
-                            .await;
-
-                        match updated_user {
-                            Ok(Some(user)) => Ok(Some(user)),
-                            Ok(None) => Ok(None),
-                            Err(e) => Err(e),
-                        }
-                    },
-                    Err(e) => Err(e),
+                match user_applications {
+                    Ok(applications) => Ok(Some(applications)),
+                    Err(e) => Err(e)
                 }
-            },
-            Ok(None) => Ok(None),
+            }
             Err(e) => Err(e)
         }
+
+    }
+
+    pub async fn add_user_applications(&self, username: String, new_application: Application) -> Result<Option<Application>, Error> {
+        let check_user: Result<Option<User>, Error> = self.client
+            .select(("users", username.clone()))
+            .await;
+
+        match check_user {
+            // if there is a valid user, then we run the process to add
+            Ok(_) => {
+                let add_application = self.client
+                    .create(("applications", new_application.uuid.clone()))
+                    .content(new_application)
+                    .await; 
+
+                match add_application {
+                    Ok(application) => Ok(application),
+                    Err(e) => Err(e)
+                }
+            },
+            Err(e) => Err(e)
+        }
+
     }
 }

@@ -12,12 +12,11 @@ pub struct User {
     pub username: String,
     pub password: String,
     pub age: i32,
-    pub application_ids: Option<Vec<String>> 
 }
 
 impl User {
     pub fn new(uuid: String, username: String, password: String, age: i32) -> User {
-        User {uuid, username, password, age, application_ids: Some(Vec::new())}
+        User {uuid, username, password, age}
     }
 }
 
